@@ -103,10 +103,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/profile_usename"
+                    android:id="@+id/profile_User_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/card_avatar"
+                    android:layout_toRightOf="@+id/profile_userName"
                     android:text="Xuân Trường"
                     android:textSize="25sp"
                     android:textColor="#fff"
@@ -118,7 +118,7 @@
                     android:background="#fff"/>
 
                 <TextView
-                    android:id="@+id/profile_id"
+                    android:id="@+id/profile_User_id"
                     android:textColor="#fff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/profile_edtFullname"
+                        android:id="@+id/profile_User_fullname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -195,7 +195,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/profile_edtPhone"
+                        android:id="@+id/profile_User_phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -229,7 +229,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/profile_edtEmail"
+                        android:id="@+id/profile_User_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -248,7 +248,7 @@
         </RelativeLayout>
 
         <Button
-            android:id="@+id/progile_signout"
+            android:id="@+id/progile_signOut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profile_main"

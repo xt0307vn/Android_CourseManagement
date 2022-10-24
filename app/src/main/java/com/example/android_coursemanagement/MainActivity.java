@@ -14,11 +14,20 @@ public class MainActivity extends AppCompatActivity {
     ProfileFragment profileFragment;
     CoursesFragment coursesFragment;
     BottomNavigationView bottomNavigationView;
+    String user_name;
+
+    public String getUser_name() {
+        return user_name;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Bundle bundle = getIntent().getExtras();
+        if(bundle !=  null) {
+            user_name = bundle.getString("user_name");
+        }
         bottomNavigationView = findViewById(R.id.main_bottomnavigationBar);
         profileFragment = new ProfileFragment();
         coursesFragment = new CoursesFragment();
@@ -38,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
 
 
 

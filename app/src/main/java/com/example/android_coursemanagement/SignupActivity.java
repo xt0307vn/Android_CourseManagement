@@ -1,5 +1,6 @@
 package com.example.android_coursemanagement;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,13 +11,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
     EditText signup_username, signup_password, signup_lastname, signup_firstname, signup_phone, signup_email;
     TextView signup_linksignin;
     Button signup_btn;
     String user_name, user_password, user_lastname, user_firstname, user_phone, user_email;
-
+    Firebase firebase = new Firebase();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +41,45 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SignupActivity.this, SigninActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        signup_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getInput();
+                Map<String, Object> user = new HashMap<>();
+                user.put("user_name", user_name);
+                user.put("user_password", user_password);
+                user.put("user_lastname", user_lastname);
+                user.put("user_firstname", user_firstname);
+                user.put("user_phone", user_phone);
+                user.put("user_email", user_email);
+
+                firebase.collection_users.whereEqualTo("user_name", user_name)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful()) {
+                                    QuerySnapshot document = task.getResult();
+                                    if(document.isEmpty()) {
+                                        firebase.collection_users.add(user);
+                                        Toast.makeText(SignupActivity.this, "Sign up successfully", Toast.LENGTH_SHORT).show();
+                                    } else {
+
+                                        Toast.makeText(SignupActivity.this, "Username already exists", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(SignupActivity.this, "Sign up failing", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
 
@@ -50,7 +102,7 @@ public class SignupActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void getDataInput() {
+    public void getInput() {
         user_name = signup_username.getText().toString().trim();
         user_password = signup_password.getText().toString().trim();
         user_firstname = signup_lastname.getText().toString().trim();
@@ -77,4 +129,6 @@ public class SignupActivity extends AppCompatActivity {
         }
         return false;
     }
+
+
 }

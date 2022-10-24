@@ -1,5 +1,6 @@
 package com.example.android_coursemanagement;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,13 +11,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class SigninActivity extends AppCompatActivity {
     EditText signin_username, signin_password;
     TextView signin_linksignup;
     Button signin_btn;
     String user_name, user_password;
-
+    Firebase firebase = new Firebase();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +38,27 @@ public class SigninActivity extends AppCompatActivity {
         signin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gototMain("ádsadf");
+                getInput();
+                firebase.collection_users.whereEqualTo("user_name", user_name)
+                        .whereEqualTo("user_password", user_password)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful()) {
+                                    QuerySnapshot document = task.getResult();
+                                    if(document.isEmpty()) {
+                                        Toast.makeText(SigninActivity.this, "Đăng nhập thât bại", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(SigninActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                        gototMain(user_name);
+                                    }
+                                }
+                            }
+                        });
+
+
+
             }
         });
 
@@ -86,6 +112,7 @@ public class SigninActivity extends AppCompatActivity {
 
     public void gototMain(String user_name) {
         Intent intent = new Intent(SigninActivity.this, MainActivity.class);
+        intent.putExtra("user_name", user_name);
         startActivity(intent);
     }
 }
