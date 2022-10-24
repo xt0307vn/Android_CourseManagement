@@ -11,43 +11,34 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                tools:ignore="MissingConstraints">
                 <androidx.recyclerview.widget.RecyclerView
-                    android:layout_marginRight="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="10dp"
                     android:id="@+id/fragment_courseRecycleView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp">
                 </androidx.recyclerview.widget.RecyclerView>
 
             </ScrollView>
 
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:focusable="true"
-            app:cardCornerRadius="50dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="MissingConstraints"
-            android:layout_margin="30dp">
 
-            <ImageView
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 android:id="@+id/image_createCourse"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_add_circle" />
+                android:layout_margin="15dp"
+                tools:ignore="MissingConstraints" />
 
-        </androidx.cardview.widget.CardView>
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
 </FrameLayout>

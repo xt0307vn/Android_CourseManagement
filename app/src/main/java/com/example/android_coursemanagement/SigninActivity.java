@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,11 +24,16 @@ public class SigninActivity extends AppCompatActivity {
     Button signin_btn;
     String user_name, user_password;
     Firebase firebase = new Firebase();
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
         connectIDLayout();
+        sharedPreferences =getSharedPreferences("user_name", MODE_PRIVATE);
+
+
+
         signin_linksignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,6 +58,9 @@ public class SigninActivity extends AppCompatActivity {
                                     } else {
                                         Toast.makeText(SigninActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                                         gototMain(user_name);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putString("user_name", user_name);
+                                        editor.commit();
                                     }
                                 }
                             }

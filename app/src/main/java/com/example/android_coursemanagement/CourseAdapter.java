@@ -24,7 +24,7 @@ import java.util.Locale;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder> {
 
-    Context context;
+    CoursesFragment coursesFragment;
     List<Courses> courses;
     Firebase firebase = new Firebase();
     public void setData(List<Courses> courses) {
@@ -32,8 +32,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         notifyDataSetChanged();
     }
 
-    public CourseAdapter (Context context) {
-        this.context = context;
+
+    public CourseAdapter(CoursesFragment coursesFragment, List<Courses> courses) {
+        this.coursesFragment = coursesFragment;
+        this.courses = courses;
     }
 
     @NonNull
@@ -59,28 +61,29 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                Toast.makeText(context, "Delete successfully", Toast.LENGTH_SHORT).show();
-                                Intent ref = new Intent(context, MainActivity.class);
-                                context.startActivity(ref);
+                                Toast.makeText(coursesFragment.getContext(), "Delete successfully", Toast.LENGTH_SHORT).show();
+                                Intent ref = new Intent(coursesFragment.getContext(), MainActivity.class);
+//                                coursesFragment.getContext().startActivity(ref);
+//                                notifyDataSetChanged();
+                                coursesFragment.showData();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(context, "Delete failing", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(coursesFragment.getContext(), "Delete failling", Toast.LENGTH_SHORT).show();
                             }
                         });
-
             }
         });
 
         holder.item_Edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, EditCourseActivity.class);
+                Intent intent = new Intent(coursesFragment.getContext(), EditCourseActivity.class);
                 String course_id = holder.item_courseID.getText().toString().trim();
                 intent.putExtra("course_id", course_id);
-                context.startActivity(intent);
+                coursesFragment.getContext().startActivity(intent);
 
 
             }
@@ -90,10 +93,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(context, CourseDetailActivity.class);
+                Intent intent = new Intent(coursesFragment.getContext(), CourseDetailActivity.class);
                 String course_id = holder.item_courseID.getText().toString().trim();
                 intent.putExtra("course_id", course_id);
-                context.startActivity(intent);
+                coursesFragment.getContext().startActivity(intent);
             }
         });
     }

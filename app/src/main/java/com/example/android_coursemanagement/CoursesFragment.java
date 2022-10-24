@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -33,9 +34,10 @@ import java.util.Map;
 
 
 public class CoursesFragment extends Fragment {
-    ImageView image_createCourse;
+    FloatingActionButton image_createCourse;
     RecyclerView  fragment_courseRecycleView;
     CourseAdapter courseAdapter;
+    List<Courses> courses;
     Firebase firebase = new Firebase();
     CollectionReference cou = FirebaseFirestore.getInstance().collection("Courses");
 
@@ -50,8 +52,23 @@ public class CoursesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Kết nối Id
         fragment_courseRecycleView = view.findViewById(R.id. fragment_courseRecycleView);
         image_createCourse = view.findViewById(R.id.image_createCourse);
+
+
+        // Cài đặt danh sách
+        courses = new ArrayList<>();
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1);
+
+        courseAdapter = new CourseAdapter(this, courses);
+        fragment_courseRecycleView.setLayoutManager(gridLayoutManager);
+        fragment_courseRecycleView.setAdapter(courseAdapter);
+
+        showData();
+
+        // Xử lý sự kiện
         image_createCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,24 +76,17 @@ public class CoursesFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-
-        courseAdapter = new CourseAdapter(getContext());
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1);
-        fragment_courseRecycleView.setLayoutManager(gridLayoutManager);
-        courseAdapter.setData(getlist());
-        fragment_courseRecycleView.setAdapter(courseAdapter);
     }
 
-    private List<Courses> getlist() {
-        List<Courses> list = new ArrayList<>();
+    public void showData() {
+        courses.clear();
         firebase.collection_courses.get()
             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()) {
                     for(QueryDocumentSnapshot document : task.getResult()) {
-                        list.add(new Courses(document.getId()
+                        courses.add(new Courses(document.getId()
                                 , document.getString("course_name")
                                 ,document.getString("course_what")
                                 , document.getString("course_why")
@@ -86,7 +96,5 @@ public class CoursesFragment extends Fragment {
                 }
             }
         });
-
-        return list;
     }
 }
