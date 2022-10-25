@@ -54,20 +54,18 @@ public class SigninActivity extends AppCompatActivity {
                                 if(task.isSuccessful()) {
                                     QuerySnapshot document = task.getResult();
                                     if(document.isEmpty()) {
-                                        Toast.makeText(SigninActivity.this, "Đăng nhập thât bại", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SigninActivity.this, "Sign in failling", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(SigninActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                        gototMain(user_name);
+                                        Toast.makeText(SigninActivity.this, "Sign in successfully", Toast.LENGTH_SHORT).show();
                                         SharedPreferences.Editor editor = sharedPreferences.edit();
                                         editor.putString("user_name", user_name);
                                         editor.commit();
+                                        gototMain(user_name);
+
                                     }
                                 }
                             }
                         });
-
-
-
             }
         });
 
