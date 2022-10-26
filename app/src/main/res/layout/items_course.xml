@@ -36,13 +36,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PHP"
+                android:textColor="#000"
                 android:textAllCaps="true"
                 android:textSize="40sp"
                 android:textStyle="bold" />
             <TextView
                 android:id="@+id/item_courseID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:text="id: 64564564665"/>
 
             <LinearLayout

@@ -68,13 +68,18 @@ public class EditCourseActivity extends AppCompatActivity {
         editcourse_btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DocumentReference doc = firebase.collection_courses.document(course_id);
-                Map<String, Object> course_update = new HashMap<>();
-                course_update.put("course_name", editcourse_Edtname.getText().toString().trim());
-                course_update.put("course_what", editcourse_Edtwhat.getText().toString().trim());
-                course_update.put("course_why", editcourse_Edtwhy.getText().toString().trim());
-                course_update.put("course_creator", editcourse_Edtcreator.getText().toString().trim());
-                showDialogEdit("Warning", "Are your sure?", doc, course_update);
+                if(checkInputName(editcourse_Edtname.getText().toString().trim())) {
+                    showDialogOk("Warning", "Name can not blank");
+                } else {
+                    DocumentReference doc = firebase.collection_courses.document(course_id);
+                    Map<String, Object> course_update = new HashMap<>();
+                    course_update.put("course_name", editcourse_Edtname.getText().toString().trim());
+                    course_update.put("course_what", editcourse_Edtwhat.getText().toString().trim());
+                    course_update.put("course_why", editcourse_Edtwhy.getText().toString().trim());
+                    course_update.put("course_creator", editcourse_Edtcreator.getText().toString().trim());
+                    showDialogEdit("Warning", "Are your sure?", doc, course_update);
+                }
+
             }
         });
 
@@ -131,6 +136,27 @@ public class EditCourseActivity extends AppCompatActivity {
                         });
             }
         });
+        alertDialog.show();
+    }
+
+    public boolean checkInputName(String name) {
+        if(name.isEmpty())
+            return true;
+        return false;
+    }
+
+    public void showDialogOk(String warning, String message) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setMessage(message);
+        alertDialog.setIcon(R.drawable.ic_warning);
+        alertDialog.setTitle(warning);
+        alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
         alertDialog.show();
     }
 }

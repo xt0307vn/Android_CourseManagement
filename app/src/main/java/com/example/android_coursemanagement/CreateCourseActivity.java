@@ -37,12 +37,17 @@ public class CreateCourseActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getInput();
-                Map<String, Object> course_create = new HashMap<>();
-                course_create.put("course_name", str_courseName);
-                course_create.put("course_what", str_courseWhat);
-                course_create.put("course_why", str_courseWhy);
-                course_create.put("course_creator", str_courseCreator);
-                showDialogCreate("Notifying", "Are you sure?", course_create);
+                if(checkInputName()) {
+                    showDialogOk("Warning", "Name can not blank");
+                } else {
+                    Map<String, Object> course_create = new HashMap<>();
+                    course_create.put("course_name", str_courseName);
+                    course_create.put("course_what", str_courseWhat);
+                    course_create.put("course_why", str_courseWhy);
+                    course_create.put("course_creator", str_courseCreator);
+                    showDialogCreate("Notifying", "Are you sure?", course_create);
+                }
+
             }
         });
 
@@ -108,8 +113,29 @@ public class CreateCourseActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    public void showDialogOk(String warning, String message) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setMessage(message);
+        alertDialog.setIcon(R.drawable.ic_warning);
+        alertDialog.setTitle(warning);
+        alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        alertDialog.show();
+    }
+
     public void gotoMain() {
         Intent intent = new Intent(CreateCourseActivity.this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public boolean checkInputName() {
+        if(str_courseName.isEmpty())
+            return true;
+        return false;
     }
 }
