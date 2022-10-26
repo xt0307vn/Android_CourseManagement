@@ -1,8 +1,10 @@
 package com.example.android_coursemanagement;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,4 +70,6 @@ public class CourseDetailActivity extends AppCompatActivity {
         detailcourse_Textcreator = findViewById(R.id.detailcourse_Textcreator);
         detailcourse_btnBack = findViewById(R.id.detailcourse_btnBack);
     }
+
+
 }

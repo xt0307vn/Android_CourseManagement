@@ -1,8 +1,10 @@
 package com.example.android_coursemanagement;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -40,21 +42,7 @@ public class CreateCourseActivity extends AppCompatActivity {
                 course_create.put("course_what", str_courseWhat);
                 course_create.put("course_why", str_courseWhy);
                 course_create.put("course_creator", str_courseCreator);
-                firebase.collection_courses.add(course_create)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Toast.makeText(CreateCourseActivity.this, "Create successfully", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(CreateCourseActivity.this, MainActivity.class);
-                                startActivity(intent);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(CreateCourseActivity.this, "Create failing", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                showDialogCreate("Notifying", "Are you sure?", course_create);
             }
         });
 
@@ -80,5 +68,39 @@ public class CreateCourseActivity extends AppCompatActivity {
         str_courseWhat = createcourse_Edtwhat.getText().toString().trim();
         str_courseWhy = createcourse_Edtwhy.getText().toString().trim();
         str_courseCreator = createcourse_Edtcreator.getText().toString().trim();
+    }
+
+    public void showDialogCreate(String warning, String message, Map<String, Object> course_create) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setMessage(message);
+        alertDialog.setIcon(R.drawable.ic_notifications);
+        alertDialog.setTitle(warning);
+        alertDialog.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        alertDialog.setNegativeButton("Create", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                firebase.collection_courses.add(course_create)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Toast.makeText(CreateCourseActivity.this, "Create successfully", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(CreateCourseActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(CreateCourseActivity.this, "Create failing", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
+        alertDialog.show();
     }
 }

@@ -107,7 +107,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/profile_userName"
-                    android:text="Xuân Trường"
                     android:textSize="25sp"
                     android:textColor="#fff"
                     android:textStyle="bold"/>
@@ -120,9 +119,9 @@
                 <TextView
                     android:id="@+id/profile_User_id"
                     android:textColor="#fff"
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ID: 56265422"/>
+                    android:layout_height="wrap_content"/>
 
             </LinearLayout>
 

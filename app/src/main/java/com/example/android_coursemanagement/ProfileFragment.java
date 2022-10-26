@@ -1,6 +1,7 @@
 package com.example.android_coursemanagement;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -42,6 +43,13 @@ public class ProfileFragment extends Fragment {
         user_name = sharedPreferences.getString("user_name", "Null");
 
         showData(user_name);
+
+        progile_signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoSigin();
+            }
+        });
     }
 
     public void connectID(View view) {
@@ -66,8 +74,8 @@ public class ProfileFragment extends Fragment {
                                 Toast.makeText(getContext(), "No data", Toast.LENGTH_SHORT).show();
                             } else {
                                 profile_User_name.setText(doc.getDocuments().get(0).getString("user_name"));
-                                profile_User_id.setText(doc.getDocuments().get(0).getId());
-                                profile_User_fullname.setText(doc.getDocuments().get(0).getString("user_firstname") + doc.getDocuments().get(0).getString("user_lastname"));
+                                profile_User_id.setText("ID: " + doc.getDocuments().get(0).getId());
+                                profile_User_fullname.setText(doc.getDocuments().get(0).getString("user_firstname") + " " + doc.getDocuments().get(0).getString("user_lastname"));
                                 profile_User_phone.setText(doc.getDocuments().get(0).getString("user_phone"));
                                 profile_User_email.setText(doc.getDocuments().get(0).getString("user_email"));
                             }
@@ -77,5 +85,9 @@ public class ProfileFragment extends Fragment {
                 });
     }
 
+    public void gotoSigin() {
+        Intent intent = new Intent(getContext(), SigninActivity.class);
+        startActivity(intent);
+    }
 
 }

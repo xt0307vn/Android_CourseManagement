@@ -16,8 +16,15 @@
         app:cardCornerRadius="18dp"
         android:elevation="15dp">
 
+        <RelativeLayout
+            android:id="@+id/item_background1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+        </RelativeLayout>
         <LinearLayout
-            android:id="@+id/item_backgroundTitle"
+            android:id="@+id/item_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#55C3B8"

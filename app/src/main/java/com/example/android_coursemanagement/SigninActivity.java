@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class SigninActivity extends AppCompatActivity {
     EditText signin_username, signin_password;
     TextView signin_linksignup;
+    CheckBox signin_cBoxremember;
     Button signin_btn;
     String user_name, user_password;
     Firebase firebase = new Firebase();
@@ -32,6 +34,15 @@ public class SigninActivity extends AppCompatActivity {
         connectIDLayout();
         sharedPreferences =getSharedPreferences("user_name", MODE_PRIVATE);
 
+        signin_username.setText(sharedPreferences.getString("save_user_name", ""));
+        signin_password.setText(sharedPreferences.getString("save_user_password", ""));
+        signin_cBoxremember.setChecked(sharedPreferences.getBoolean("save_checked", false));
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null) {
+            signin_username.setText(bundle.getString("user_name"));
+            signin_password.setText(bundle.getString("user_password"));
+        }
 
 
         signin_linksignup.setOnClickListener(new View.OnClickListener() {
@@ -41,33 +52,54 @@ public class SigninActivity extends AppCompatActivity {
             }
         });
 
+
         signin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getInput();
-                firebase.collection_users.whereEqualTo("user_name", user_name)
-                        .whereEqualTo("user_password", user_password)
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if(task.isSuccessful()) {
-                                    QuerySnapshot document = task.getResult();
-                                    if(document.isEmpty()) {
-                                        Toast.makeText(SigninActivity.this, "Sign in failling", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(SigninActivity.this, "Sign in successfully", Toast.LENGTH_SHORT).show();
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putString("user_name", user_name);
-                                        editor.commit();
-                                        gototMain(user_name);
+                if(checkInput() == true) {
+                    showDialogOk("Warning","Can not blank");
+                } else {
+                    firebase.collection_users.whereEqualTo("user_name", user_name)
+                            .whereEqualTo("user_password", user_password)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if(task.isSuccessful()) {
+                                        QuerySnapshot document = task.getResult();
+                                        if(document.isEmpty()) {
+                                            Toast.makeText(SigninActivity.this, "Sign in failling", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(SigninActivity.this, "Sign in successfully", Toast.LENGTH_SHORT).show();
+                                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                                            editor.putString("user_name", user_name);
+                                            editor.putString("user_password", user_password);
+                                            editor.commit();
+                                            if(signin_cBoxremember.isChecked()) {
+                                                SharedPreferences.Editor save = sharedPreferences.edit();
+                                                save.putString("save_user_name", user_name);
+                                                save.putString("save_user_password", user_password);
+                                                save.putBoolean("save_checked", true);
+                                                save.commit();
+                                            } else {
+                                                SharedPreferences.Editor save = sharedPreferences.edit();
+                                                save.remove("save_user_name");
+                                                save.remove("save_user_password");
+                                                save.remove("save_checked");
+                                                save.commit();
+                                            }
+                                            gototMain(user_name);
 
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                }
+
             }
         });
+
 
 
 
@@ -78,6 +110,7 @@ public class SigninActivity extends AppCompatActivity {
         signin_password = findViewById(R.id.signin_edtPassword);
         signin_linksignup = findViewById(R.id.link_signup);
         signin_btn = findViewById(R.id.signin_btnSignin);
+        signin_cBoxremember = findViewById(R.id.signin_cBoxremember);
     }
 
     public void gotoSignup() {
@@ -85,13 +118,6 @@ public class SigninActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void gotoMain(int id) {
-        Intent intent = new Intent(SigninActivity.this, MainActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt("id", id);
-        bundle.putBundle("data", bundle);
-        startActivity(intent);
-    }
 
     public void getInput() {
         user_name = signin_username.getText().toString().trim();
@@ -100,14 +126,16 @@ public class SigninActivity extends AppCompatActivity {
 
     public boolean checkInput() {
         if(user_name.isEmpty() || user_password.isEmpty()) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
-    public void showDialogOk(String message) {
+    public void showDialogOk(String warning, String message) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setMessage(message);
+        alertDialog.setIcon(R.drawable.ic_warning);
+        alertDialog.setTitle(warning);
         alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

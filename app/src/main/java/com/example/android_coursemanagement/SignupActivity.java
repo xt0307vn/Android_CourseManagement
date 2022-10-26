@@ -15,14 +15,13 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class SignupActivity extends AppCompatActivity {
     EditText signup_username, signup_password, signup_lastname, signup_firstname, signup_phone, signup_email;
@@ -30,6 +29,7 @@ public class SignupActivity extends AppCompatActivity {
     Button signup_btn;
     String user_name, user_password, user_lastname, user_firstname, user_phone, user_email;
     Firebase firebase = new Firebase();
+    Timer timer = new Timer();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,38 +48,48 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getInput();
-                Map<String, Object> user = new HashMap<>();
-                user.put("user_name", user_name);
-                user.put("user_password", user_password);
-                user.put("user_lastname", user_lastname);
-                user.put("user_firstname", user_firstname);
-                user.put("user_phone", user_phone);
-                user.put("user_email", user_email);
+                if(checkInput()) {
+                    showDialogOk("Warning","Can not blank", R.drawable.ic_warning);
+                } else {
+                    Map<String, Object> user = new HashMap<>();
+                    user.put("user_name", user_name);
+                    user.put("user_password", user_password);
+                    user.put("user_lastname", user_lastname);
+                    user.put("user_firstname", user_firstname);
+                    user.put("user_phone", user_phone);
+                    user.put("user_email", user_email);
 
-                firebase.collection_users.whereEqualTo("user_name", user_name)
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if(task.isSuccessful()) {
-                                    QuerySnapshot document = task.getResult();
-                                    if(document.isEmpty()) {
-                                        firebase.collection_users.add(user);
-                                        Toast.makeText(SignupActivity.this, "Sign up successfully", Toast.LENGTH_SHORT).show();
-                                    } else {
+                    firebase.collection_users.whereEqualTo("user_name", user_name)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if(task.isSuccessful()) {
+                                        QuerySnapshot document = task.getResult();
+                                        if(document.isEmpty()) {
+                                            firebase.collection_users.add(user);
+                                            showDialogNoButton("Notìying", "Sign up successfully", R.drawable.ic_notifications);
+                                            timer.schedule(new TimerTask() {
+                                                @Override
+                                                public void run() {
+                                                    gotoSignin();
+                                                }
+                                            }, 2000);
 
-                                        Toast.makeText(SignupActivity.this, "Username already exists", Toast.LENGTH_SHORT).show();
-
+                                        } else {
+                                            showDialogOk("Notifying", "Username already exists", R.drawable.ic_notifications);
+                                        }
                                     }
                                 }
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(SignupActivity.this, "Sign up failing", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(SignupActivity.this, "Sign up failing", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+
             }
         });
 
@@ -99,6 +109,8 @@ public class SignupActivity extends AppCompatActivity {
 
     public void gotoSignin() {
         Intent intent = new Intent(SignupActivity.this, SigninActivity.class);
+        intent.putExtra("user_name", user_name);
+        intent.putExtra("user_password", user_password);
         startActivity(intent);
     }
 
@@ -111,9 +123,19 @@ public class SignupActivity extends AppCompatActivity {
         user_email = signup_email.getText().toString().trim();
     }
 
-    public void showDialogOk(String message) {
+
+    public boolean checkInput() {
+        if(user_name.isEmpty() || user_password.isEmpty() || user_firstname.isEmpty() || user_lastname.isEmpty() || user_phone.isEmpty() || user_email.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    public void showDialogOk(String warning, String message, int icon) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setMessage(message);
+        alertDialog.setIcon(icon);
+        alertDialog.setTitle(warning);
         alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -123,11 +145,12 @@ public class SignupActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    public boolean checkInput() {
-        if(user_name.isEmpty() || user_password.isEmpty() || user_firstname.isEmpty() || user_lastname.isEmpty() || user_phone.isEmpty() || user_email.isEmpty()) {
-            return true;
-        }
-        return false;
+    public void showDialogNoButton(String warning, String message, int icon) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setMessage(message);
+        alertDialog.setIcon(icon);
+        alertDialog.setTitle(warning);
+        alertDialog.show();
     }
 
 

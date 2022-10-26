@@ -107,18 +107,24 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp">
 
-                <TextView
+                <CheckBox
+                    android:id="@+id/signin_cBoxremember"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="30dp"
+                    android:button="@drawable/custom_checkbox"
                     android:fontFamily="monospace"
-                    android:text="Forgot password ?"
+                    android:text="Remember password"
+                    android:textColor="#94B8B8"
                     android:textSize="18sp" />
 
+
             </RelativeLayout>
+
+
 
             <Button
                 android:id="@+id/signin_btnSignin"

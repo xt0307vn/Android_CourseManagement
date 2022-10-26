@@ -1,8 +1,10 @@
 package com.example.android_coursemanagement;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -72,19 +74,7 @@ public class EditCourseActivity extends AppCompatActivity {
                 course_update.put("course_what", editcourse_Edtwhat.getText().toString().trim());
                 course_update.put("course_why", editcourse_Edtwhy.getText().toString().trim());
                 course_update.put("course_creator", editcourse_Edtcreator.getText().toString().trim());
-                doc.update(course_update)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(EditCourseActivity.this, "Update successfully", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(EditCourseActivity.this, "Update failing", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                showDialogEdit("Warning", "Are your sure?", doc, course_update);
             }
         });
 
@@ -110,5 +100,37 @@ public class EditCourseActivity extends AppCompatActivity {
     public void gotoMain() {
         Intent intent = new Intent(EditCourseActivity.this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public void showDialogEdit(String warning, String message, DocumentReference doc, Map<String, Object> course_update) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setMessage(message);
+        alertDialog.setIcon(R.drawable.ic_warning);
+        alertDialog.setTitle(warning);
+        alertDialog.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        alertDialog.setNegativeButton("Update", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                doc.update(course_update)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(EditCourseActivity.this, "Update successfully", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(EditCourseActivity.this, "Update failing", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
+        alertDialog.show();
     }
 }
