@@ -13,11 +13,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="#56C3B8">
-            </RelativeLayout>
+                android:background="#56C3B8"></RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -69,8 +69,8 @@
                 android:layout_height="106dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="82dp"
-                android:rotation="45"
-                android:background="#fff">
+                android:background="#fff"
+                android:rotation="45">
 
             </RelativeLayout>
 
@@ -80,16 +80,17 @@
                 android:layout_height="100dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="85dp"
-                android:rotation="45">
+                android:rotation="45"
+                app:cardCornerRadius="49dp">
 
 
-                    <ImageView
-                        android:id="@+id/image_avatar"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_gravity="center"
-                        android:rotation="-45"
-                        android:src="@drawable/unnamed" />
+                <ImageView
+                    android:id="@+id/image_avatar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:rotation="-45"
+                    android:src="@drawable/_72163" />
 
 
             </androidx.cardview.widget.CardView>
@@ -107,25 +108,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/profile_userName"
-                    android:textSize="25sp"
                     android:textColor="#fff"
-                    android:textStyle="bold"/>
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:background="#fff"/>
+                    android:background="#fff" />
 
                 <TextView
                     android:id="@+id/profile_User_id"
-                    android:textColor="#fff"
-                    android:textSize="12sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:textSize="12sp" />
 
             </LinearLayout>
-
-
 
 
         </RelativeLayout>

@@ -25,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+
         android:background="#56C3B8"
         app:itemIconTint="#fff"
         app:itemTextColor="#fff"

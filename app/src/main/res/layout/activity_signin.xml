@@ -93,16 +93,31 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/signin_edtPassword"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="monospace"
-                    android:hint="Enter Password"
-                    android:inputType="textPassword"
-                    android:textColor="#56C3B8"
-                    android:textColorHint="#94b8b8" />
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/signin_edtPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="monospace"
+                        android:hint="Enter Password"
+                        android:inputType="textPassword"
+                        android:textColor="#56C3B8"
+                        android:textColorHint="#94b8b8" />
+
+                    <CheckBox
+                        android:id="@+id/signin_cBoxshpassword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="10dp"
+                        android:button="@drawable/custom_shpassword"/>
+
+                </RelativeLayout>
+
             </LinearLayout>
 
             <RelativeLayout

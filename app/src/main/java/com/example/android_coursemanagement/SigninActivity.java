@@ -8,9 +8,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class SigninActivity extends AppCompatActivity {
     EditText signin_username, signin_password;
     TextView signin_linksignup;
-    CheckBox signin_cBoxremember;
+    CheckBox signin_cBoxremember, signin_cBoxshpassword;
     Button signin_btn;
     String user_name, user_password;
     Firebase firebase = new Firebase();
@@ -100,7 +103,16 @@ public class SigninActivity extends AppCompatActivity {
             }
         });
 
-
+        signin_cBoxshpassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    signin_password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    signin_password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+            }
+        });
 
 
     }
@@ -111,6 +123,7 @@ public class SigninActivity extends AppCompatActivity {
         signin_linksignup = findViewById(R.id.link_signup);
         signin_btn = findViewById(R.id.signin_btnSignin);
         signin_cBoxremember = findViewById(R.id.signin_cBoxremember);
+        signin_cBoxshpassword = findViewById(R.id.signin_cBoxshpassword);
     }
 
     public void gotoSignup() {

@@ -205,4 +205,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         alertDialog.show();
     }
 
+
+
 }
