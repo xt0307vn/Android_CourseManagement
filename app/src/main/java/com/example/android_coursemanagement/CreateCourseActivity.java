@@ -46,7 +46,12 @@ public class CreateCourseActivity extends AppCompatActivity {
             }
         });
 
-
+        createcourse_btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoMain();
+            }
+        });
 
 
 
@@ -89,8 +94,7 @@ public class CreateCourseActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Toast.makeText(CreateCourseActivity.this, "Create successfully", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(CreateCourseActivity.this, MainActivity.class);
-                                startActivity(intent);
+                                gotoMain();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -102,5 +106,10 @@ public class CreateCourseActivity extends AppCompatActivity {
             }
         });
         alertDialog.show();
+    }
+
+    public void gotoMain() {
+        Intent intent = new Intent(CreateCourseActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }
