@@ -68,7 +68,7 @@ public class SignupActivity extends AppCompatActivity {
                                         QuerySnapshot document = task.getResult();
                                         if(document.isEmpty()) {
                                             firebase.collection_users.add(user);
-                                            showDialogNoButton("Notìying", "Sign up successfully", R.drawable.ic_notifications);
+                                            showDialogNoButton("Notifying", "Sign up successfully", R.drawable.ic_notifications);
                                             timer.schedule(new TimerTask() {
                                                 @Override
                                                 public void run() {
